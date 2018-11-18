@@ -1,3 +1,4 @@
+// The 3n + 1 problem : recursion to stack
 #include <iostream>
 #include <stack>
 using namespace std;
@@ -19,7 +20,7 @@ int main() {
 			} 
 			int len = cycle.size();
             ans = max(ans, len);
-        }
+        
         cout << ans << endl;
     }
     return 0;
