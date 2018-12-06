@@ -1,4 +1,4 @@
-#搶因數遊戲: trivial
+//搶因數遊戲: trivial
 #include <iostream>
 using namespace std;
 
