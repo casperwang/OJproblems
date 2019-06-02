@@ -1,11 +1,8 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <vector>
+#include <bits/stdc++.h>
 #define N 50000
 using namespace std;
 int val[N+5];
-int rem[N+5], pre[N+5], bit[N+5];
+int bit[N+5];
 int T, n, q;
 int o, l, r, p, v;
 struct op {
@@ -52,27 +49,27 @@ void BS(int L, int R, vector <int> &VS) {
 	  }
 	} else if (ops[i].o == -2) {
 	  if (ops[i].v <= mid) {
-  	  	modify(ops[i].p,-1);
-  	  	LS.push_back(i);
+  	  modify(ops[i].p,-1);
+  	  LS.push_back(i);
 	  } else {
 	  	RS.push_back(i);
 	  }
 	} else if (ops[i].o == 1) {
 	  ops[i].ans = query(ops[i].r) - query(ops[i].l-1);
-	  if (ops[i].ans >= ops[i].v) {
-	  	LS.push_back(i);
-	  } else {
-	  	ops[i].v -= ops[i].ans;
-	  	RS.push_back(i);
-	  }
-	}
+  	if (ops[i].ans >= ops[i].v) {
+  	  	LS.push_back(i);
+  	} else {
+  	  	ops[i].v -= ops[i].ans;
+  	  	RS.push_back(i);
+  	  }
+  	}
   }
   for (auto i : LS) {
-  	if (ops[i].o == 2) {
-  	  modify(ops[i].p,-1);
-	} else if (ops[i].o == -2) {
-	  modify(ops[i].p, 1);
-	}
+    if (ops[i].o == 2) {
+    	  modify(ops[i].p,-1);
+  	} else if (ops[i].o == -2) {
+  	  modify(ops[i].p, 1);
+  	}
   }
   vector <int> ().swap(VS);
   BS(  L  ,mid,LS);
@@ -110,7 +107,6 @@ int main() {
 	for (int j = 1; j < DSC.size(); j++) {
 	  while (j < DSC.size() && DSC[j] == DSC[j-1]) DSC.erase(DSC.begin()+j);
 	}
-	for (int j = 0; j < DSC.size(); j++) rem[j] = 0; // initialize
 	for (int j = 0; j < ops.size(); j++) {
 	  if (ops[j].o == 2 || ops[j].o == -2) {
 	  	ops[j].v = lower_bound(DSC.begin(),DSC.end(),ops[j].v) - DSC.begin() + 1;
