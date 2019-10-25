@@ -1,29 +1,27 @@
-//Modular Multiplicative Inverse: math
-#include <iostream>
+#include <bits/stdc++.h>
+#define Hina ios_base::sync_with_stdio(0),cin.tie(0)
+#define int long long
+#define ff first
+#define ss second
 using namespace std;
 
-long long int a, n, x, y;
+int n, a;
 
-long long int exgcd(long long int a, long long int b, long long int &x, long long int &y) {
-    if(b == 0) {
-        x = 1;
-        y = 0;
-        return a;
-    }
-    long long int r = exgcd(b, a%b, x, y);
-    long long int t = x;
-    x = y;
-    y = t - a/b*y;
-    return r;
+pair <int, int> exgcd(int a, int b) {
+	if (!b) return {1, 0};
+	pair <int, int> q = exgcd(b, a%b);
+	return {q.ss, q.ff - q.ss * (a/b)};
 }
 
-int main(){
-    while (cin >> a >> n) {
-        if (exgcd(a, n, x, y) != 1 || !(x%n)) {
-            cout << "No Inverse" << endl;
-        } else {
-            while (x < 0) x += n;
-            cout << x << endl;
-        }
-    }
+int gcd(int a, int b) {
+	return (!b)?a:gcd(b, a%b);
+}
+
+signed main() {
+	Hina;
+	while (cin >> a >> n) {
+		if (gcd(a, n) > 1 || a == n || n == 1) cout << "No Inverse" << endl;
+		else cout << ((exgcd(a, n).ff%n)+n)%n << endl;
+	}
+	return 0;
 }
