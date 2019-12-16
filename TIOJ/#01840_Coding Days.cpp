@@ -32,44 +32,44 @@ void modify(int n, int a) {
 void BS(int L, int R, vector <int> &VS) {
   if (!VS.size()) return;
   if (L == R) {
-  	for (auto i : VS) {
-  	  if (ops[i].o == 1) ops[i].ans = DSC[L-1];
-	}
-	return;
+    for (auto i : VS) {
+      if (ops[i].o == 1) ops[i].ans = DSC[L-1];
+    }
+    return;
   }
   vector <int> LS, RS;
   int mid = (L+R)/2;
   for (auto i : VS) {
-  	if (ops[i].o == 2) {
-  	  if (ops[i].v <= mid) {
-  	  	modify(ops[i].p,1);
-  	  	LS.push_back(i);
-	  } else {
-	  	RS.push_back(i);
-	  }
-	} else if (ops[i].o == -2) {
-	  if (ops[i].v <= mid) {
-  	  modify(ops[i].p,-1);
-  	  LS.push_back(i);
-	  } else {
-	  	RS.push_back(i);
-	  }
-	} else if (ops[i].o == 1) {
-	  ops[i].ans = query(ops[i].r) - query(ops[i].l-1);
-  	if (ops[i].ans >= ops[i].v) {
-  	  	LS.push_back(i);
-  	} else {
-  	  	ops[i].v -= ops[i].ans;
-  	  	RS.push_back(i);
-  	  }
-  	}
+    if (ops[i].o == 2) {
+      if (ops[i].v <= mid) {
+        modify(ops[i].p,1);
+        LS.push_back(i);
+      } else {
+        RS.push_back(i);
+      }
+    } else if (ops[i].o == -2) {
+      if (ops[i].v <= mid) {
+        modify(ops[i].p,-1);
+        LS.push_back(i);
+      } else {
+        RS.push_back(i);
+      }
+    } else if (ops[i].o == 1) {
+      ops[i].ans = query(ops[i].r) - query(ops[i].l-1);
+      if (ops[i].ans >= ops[i].v) {
+        LS.push_back(i);
+      } else {
+        ops[i].v -= ops[i].ans;
+        RS.push_back(i);
+      }
+    }
   }
   for (auto i : LS) {
     if (ops[i].o == 2) {
-    	  modify(ops[i].p,-1);
-  	} else if (ops[i].o == -2) {
-  	  modify(ops[i].p, 1);
-  	}
+        modify(ops[i].p,-1);
+    } else if (ops[i].o == -2) {
+      modify(ops[i].p, 1);
+    }
   }
   vector <int> ().swap(VS);
   BS(  L  ,mid,LS);
@@ -80,43 +80,43 @@ int main() {
   for (int i = 0; i < T; i++) {
     scanf("%d%d",&n,&q);
     DSC.clear();
-	ops.clear();
+  ops.clear();
     for (int j = 1; j <= n; j++) {
       scanf("%d",&val[j]);
       ops.push_back(op(2,j,val[j]));
       DSC.push_back(val[j]);
-	}
-	vector <int> VS;
-	for (int j = 0; j < q; j++) {
-	  scanf("%d",&o);
-	  if (o == 1) {
-	  	scanf("%d%d%d",&l,&r,&v);
-	  	ops.push_back(op(1,l,r,v));
-	  } else if (o == 2) {
-	  	scanf("%d%d",&p,&v);
-	  	ops.push_back(op(-2,p,val[p]));
-	  	ops.push_back(op( 2,p,  v   ));
-	  	val[p] = v;
-	  	DSC.push_back(v);
-	  } else if (o == 3) {
-	  	scanf("%d%d",&p,&v);
-	  	ops.push_back(op(-1));
-	  }
-	}
-	sort(DSC.begin(), DSC.end());
-	for (int j = 1; j < DSC.size(); j++) {
-	  while (j < DSC.size() && DSC[j] == DSC[j-1]) DSC.erase(DSC.begin()+j);
-	}
-	for (int j = 0; j < ops.size(); j++) {
-	  if (ops[j].o == 2 || ops[j].o == -2) {
-	  	ops[j].v = lower_bound(DSC.begin(),DSC.end(),ops[j].v) - DSC.begin() + 1;
-	  }
-	}
-	for (int j = 0; j < ops.size(); j++) VS.push_back(j);
-	BS(1,(int)DSC.size(),VS);
-	for (int j = 0; j < ops.size(); j++) {
-	  if (ops[j].o == -1) printf("7122\n");
-	  else if (ops[j].o == 1) printf("%d\n",ops[j].ans);
-	}
+  }
+  vector <int> VS;
+  for (int j = 0; j < q; j++) {
+    scanf("%d",&o);
+    if (o == 1) {
+      scanf("%d%d%d",&l,&r,&v);
+      ops.push_back(op(1,l,r,v));
+    } else if (o == 2) {
+      scanf("%d%d",&p,&v);
+      ops.push_back(op(-2,p,val[p]));
+      ops.push_back(op( 2,p,  v   ));
+      val[p] = v;
+      DSC.push_back(v);
+    } else if (o == 3) {
+      scanf("%d%d",&p,&v);
+      ops.push_back(op(-1));
+    }
+  }
+  sort(DSC.begin(), DSC.end());
+  for (int j = 1; j < DSC.size(); j++) {
+    while (j < DSC.size() && DSC[j] == DSC[j-1]) DSC.erase(DSC.begin()+j);
+  }
+  for (int j = 0; j < ops.size(); j++) {
+    if (ops[j].o == 2 || ops[j].o == -2) {
+      ops[j].v = lower_bound(DSC.begin(),DSC.end(),ops[j].v) - DSC.begin() + 1;
+    }
+  }
+  for (int j = 0; j < ops.size(); j++) VS.push_back(j);
+  BS(1,(int)DSC.size(),VS);
+  for (int j = 0; j < ops.size(); j++) {
+    if (ops[j].o == -1) printf("7122\n");
+    else if (ops[j].o == 1) printf("%d\n",ops[j].ans);
+  }
   }
 }
