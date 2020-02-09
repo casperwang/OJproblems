@@ -1,57 +1,55 @@
 #include <bits/stdc++.h>
 #define MAXN 500000
-#define pii pair<int,int>
 #define pb push_back
-#define ff first
-#define ss second
 using namespace std;
 
-int t, n, m;
-int a, b;
+int t, n, m, now;
 int ans1, ans2;
-int arr[MAXN+5];
-vector <int> path[MAXN+5];
-int deg[MAXN+5];
-int ans[MAXN+5];
+int a, b, tmp;
 int vis[MAXN+5];
-pii tmp;
-priority_queue <pii, vector<pii>, greater<pii>> nxt;
+int deg[MAXN+5];
+stack <int, vector<int>> cnt[MAXN+5];
+vector <int> path[MAXN+5];
 
 signed main() {
+	return 0;
 	ios_base::sync_with_stdio(0), cin.tie(0);
 	cin >> t;
-	for (int i = 0; i < t; i++) {
+	while (t--) {
 		cin >> n >> m;
-		while (nxt.size()) nxt.pop();
-		for (int j = 0; j < n; j++) {
-			deg[j] = ans[j] = vis[j] = arr[j] = 0;
-			path[j].clear();
+		for (int i = 0; i < n; i++) {
+			deg[i] = vis[i] = 0;
+			path[i].clear();
+			while (cnt[i].size()) cnt[i].pop();
 		}
-		ans1 = ans2 = 0;
-		for (int j = 0; j < m; j++) {
+		ans1 = ans2 = now = 0;
+		for (int i = 0; i < m; i++) {
 			cin >> a >> b;
-			path[a].pb(b);
-			path[b].pb(a);
-			deg[a]++;
-			deg[b]++;
-			ans[min(a, b)]++;
+			deg[a]++, deg[b]++;
+			path[a].pb(b), path[b].pb(a);
+			vis[min(a, b)]++;
 		}
-		for (int j = 0; j < n; j++) {
-			ans1 = max(ans1, ans[j]);
-			nxt.push(pii(deg[j], j));
+		for (int i = 0; i < n; i++) {
+			ans1 = max(ans1, vis[i]);
+			cnt[deg[i]].push(i);
 		}
-		for (int j = 0; j < n; j++) {
-			while (nxt.size() && vis[nxt.top().ss]) nxt.pop();
-			tmp = nxt.top();
-			vis[tmp.ss] = 1;
-			arr[j] = tmp.ss;
-			ans2 = max(ans2, tmp.ff);
-			for (auto k : path[arr[j]]) {
-				deg[k]--;
-				nxt.push(pii(deg[k], k));
+		for (int i = 0; i < n; i++)
+			vis[i] = 0;
+		for (int i = 0; i < n; ) {
+			while (!cnt[now].size()) now++;
+			if (vis[cnt[now].top()]) {
+				cnt[now].pop(); continue;
+			} i++;
+			ans2 = max(ans2, now);
+			tmp = cnt[now].top();
+			vis[tmp] = 1, cnt[now].pop();
+			for (int j : path[tmp]) {
+				if (!vis[j] && deg[j] > now) {
+					deg[j]--;
+					cnt[deg[j]].push(j);
+				}
 			}
 		}
-		cout << ans1 << " " << ans2 << "\n";
+		cout << ans1 << " " << ans2 << '\n';
 	}
-	return 0;
 }
